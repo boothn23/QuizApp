@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">QuizApp</string>
+    <string name="false1">False</string>
+    <string name="true1">True</string>
+    <string name="next">Next Question</string>
+    <string name="quest1">Luanda is the Capital of Angola</string>
+    <string name="quest2">Canberra is the Capital of New Zealand</string>
+    <string name="quest3">Asuncion is the Capital of Paraguay</string>
+    <string name="quest4">Quito is the Capital of Ecuador</string>
+    <string name="quest5">Dublin is the Capital of Northern Ireland</string>
+    <string name="correct">Correct!</string>
+    <string name="wrong">Incorrect!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cheat">Cheat!</string>
+    <string name="would_you_really_like_to_cheat">Would you really like to cheat?</string>
+    <string name="show_answer">Show Answer</string>
+    <string name="answer">Answer</string>
+    <string name="cheater">True but cheating is wrong!</string>
+    <string name="you_won">You Won!</string>
+    <string name="incorrect">TextView</string>
+    <string name="info">This is a quiz app about national capitals!</string>
+    <string name="info2">We hope you enjoy!</string>
+
+
+</resources>
