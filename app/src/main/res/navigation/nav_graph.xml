@@ -25,9 +25,6 @@
         android:name="com.example.tipcalculator.CheatFragment"
         android:label="fragment_cheat"
         tools:layout="@layout/fragment_cheat" >
-        <argument
-            android:name="cheat"
-            app:argType="boolean" />
         <action
             android:id="@+id/action_cheatFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
@@ -37,9 +34,6 @@
         android:name="com.example.tipcalculator.GameWonFragment"
         android:label="fragment_game_won"
         tools:layout="@layout/fragment_game_won" >
-        <argument
-            android:name="incorrect"
-            app:argType="integer" />
         <action
             android:id="@+id/action_gameWonFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />

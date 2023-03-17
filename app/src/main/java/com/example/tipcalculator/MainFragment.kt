@@ -29,16 +29,7 @@ class MainFragment : Fragment() {
     ): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val rootView = binding.root
-        if (savedInstanceState != null) {
-            index = savedInstanceState.getInt(SAVED_QUESTION)
-            cheated = savedInstanceState.getBoolean(SAVED_QUESTION)
-        }
-
         setHasOptionsMenu(true)
-        setFragmentResultListener("REQUESTING_REPLY_KEY") { requestKey, bundle ->
-            val result = bundle.getBoolean("REPLY_KEY")
-            cheated = result
-        }
 
 
         binding.question1.text = getString(questions[index].question)
@@ -92,7 +83,7 @@ class MainFragment : Fragment() {
             }
 
         binding.cheat.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToCheatFragment(questions[index].answer)
+            val action = MainFragmentDirections.actionMainFragmentToCheatFragment()
             rootView.findNavController().navigate(action)
         }
 
@@ -115,30 +106,23 @@ class MainFragment : Fragment() {
     }
 
     fun checkAnswer( answer: Boolean) {
-        if (questions[index].answer == answer && cheated) {
+        if (viewModel.checkAnswer(answer) && viewModel.currentQuestionCheatStatus) {
             Toast.makeText(activity, getString(R.string.cheater), Toast.LENGTH_SHORT).show()
-            cheated = false
+
         }
-        else if (questions[index].answer == answer ) {
+        else if (viewModel.checkAnswer(answer)) {
             Toast.makeText(activity, getString(R.string.correct), Toast.LENGTH_SHORT).show()
-            correct++
             myMediaPlayer = MediaPlayer.create(context, R.raw.ding)
             myMediaPlayer.start()
         }
 
         else {
             Toast.makeText(activity, getString(R.string.wrong), Toast.LENGTH_SHORT).show()
-                wrong++
             myMediaPlayer = MediaPlayer.create(context, R.raw.boat)
             myMediaPlayer.start()
             }
     }
 
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        super.onSaveInstanceState(savedInstanceState)
-        savedInstanceState.putInt(SAVED_QUESTION, index )
-        savedInstanceState.putBoolean(SAVED_QUESTION, cheated)
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

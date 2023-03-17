@@ -1,8 +1,11 @@
 package com.example.tipcalculator
 
+import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlin.math.absoluteValue
 
 class QuizViewModel : ViewModel() {
 
@@ -30,14 +33,33 @@ class QuizViewModel : ViewModel() {
     val gameWon: LiveData<Boolean>
         get() = _gameWon
 
-    private var currentQuestionAnswer = false
+     var currentQuestionAnswer = questions[_index.value?:0].answer
         get() = currentQuestionAnswer
 
-    private var currentQuestionText = MutableLiveData(questions[index.value]).toString()
+     var currentQuestionText = questions[_index.value?:0].question
         get() = currentQuestionText
 
-    private var currentQuestionCheatStatus = false
+    var currentQuestionCheatStatus = questions[_index.value?:0].cheated
         get() = currentQuestionCheatStatus
+
+    fun setCheatedStatusForCurrentQuestion(status: Boolean):Boolean {
+        currentQuestionCheatStatus = status
+
+    }
+    fun checkIfGameWon() {
+        if (_correct == 3) {
+            _gameWon.value = true
+        }
+    }
+    fun checkAnswer( answer: Boolean):Boolean {
+        if (questions[_index.value?:0].answer == answer ) {
+            return true
+        }
+        else {
+            _wrong++
+            return false
+        }
+    }
 
 
 }
