@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.SeekBar
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.tipcalculator.databinding.FragmentGameWonBinding
@@ -18,6 +19,7 @@ class GameWonFragment : Fragment() {
     private var _binding: FragmentGameWonBinding? = null
     private val binding get() = _binding!!
     lateinit var myMediaPlayer: MediaPlayer
+    private val viewModel: QuizViewModel by activityViewModels()
 
 
     override fun onCreateView(

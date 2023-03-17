@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -15,6 +16,9 @@ class CheatFragment : Fragment() {
     private var _binding: FragmentCheatBinding? = null
     private val binding get() = _binding!!
     private var cheat = false
+    private val viewModel: QuizViewModel by activityViewModels()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,8 +26,7 @@ class CheatFragment : Fragment() {
     ): View? {
         _binding = FragmentCheatBinding.inflate(inflater, container, false)
         val rootView = binding.root
-        val args = CheatFragmentArgs.fromBundle(requireArguments())
-        binding.give.setOnClickListener{
+        val args = CheatFragmentArgs.fromBundle(requireArguments())binding.give.setOnClickListener{
             binding.answer.text = args.cheat.toString()
             cheat = true
             setFragmentResult("REQUESTING_REPLY_KEY", bundleOf("REPLY_KEY" to cheat))

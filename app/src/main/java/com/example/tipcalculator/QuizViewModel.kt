@@ -42,15 +42,20 @@ class QuizViewModel : ViewModel() {
     var currentQuestionCheatStatus = questions[_index.value?:0].cheated
         get() = currentQuestionCheatStatus
 
-    fun setCheatedStatusForCurrentQuestion(status: Boolean):Boolean {
+    fun setCheatedStatusForCurrentQuestion(status: Boolean){
         currentQuestionCheatStatus = status
-
     }
     fun checkIfGameWon() {
         if (_correct == 3) {
             _gameWon.value = true
         }
     }
+
+    fun nextQuestion() {
+        val currentIndex = index.value ?:0
+        _index.value = currentIndex + 1
+    }
+
     fun checkAnswer( answer: Boolean):Boolean {
         if (questions[_index.value?:0].answer == answer ) {
             return true

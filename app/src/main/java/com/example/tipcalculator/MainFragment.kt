@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -14,13 +15,10 @@ import kotlinx.coroutines.NonCancellable.start
 
 const val SAVED_QUESTION =""
 class MainFragment : Fragment() {
-    private val viewModel: QuizViewModel by viewModels()
+    private val viewModel: QuizViewModel by activityViewModels()
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-
     lateinit var myMediaPlayer: MediaPlayer
-
-
 
 
     override fun onCreateView(
@@ -31,14 +29,17 @@ class MainFragment : Fragment() {
         val rootView = binding.root
         setHasOptionsMenu(true)
 
+        viewModel.index.observe(viewLifecycleOwner) {
+            binding.question1.text = viewModel.currentQuestionText.toString()
+        }
 
-        binding.question1.text = getString(questions[index].question)
+
         val myOnClickListener: View.OnClickListener =
             View.OnClickListener { view ->
                 when (view.id) {
                     R.id.true1 -> {
                         checkAnswer(true)
-                        if (correct == 3) {
+                        if (viewModel.gameWon.value) {
                             val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(wrong)
                             rootView.findNavController().navigate(action)
                         }
