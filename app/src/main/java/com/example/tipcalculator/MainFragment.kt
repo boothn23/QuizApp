@@ -6,19 +6,16 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.tipcalculator.databinding.FragmentMainBinding
-import kotlinx.coroutines.NonCancellable.start
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-const val SAVED_QUESTION =""
+
 class MainFragment : Fragment() {
     private val viewModel: QuizViewModel by activityViewModels()
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    lateinit var myMediaPlayer: MediaPlayer
 
 
     override fun onCreateView(
@@ -30,7 +27,25 @@ class MainFragment : Fragment() {
         setHasOptionsMenu(true)
 
         viewModel.index.observe(viewLifecycleOwner) {
-            binding.question1.text = viewModel.currentQuestionText.toString()
+            binding.question1.text = getString(viewModel.currentQuestionText)
+        }
+        viewModel.gameWon.observe(viewLifecycleOwner) { gameWon ->
+            if (gameWon) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.top))
+                    .setMessage(getString(R.string.bottom))
+//                    .setTitle("Congratulations")
+//                    .setMessage("You Won! Would you like to play again?")
+                    .setPositiveButton("Yes") { dialog, which ->
+                        viewModel.reset()
+                    }
+                    .setNegativeButton("No") { dialog, which ->
+                        val action = MainFragmentDirections.actionMainFragmentToGameWonFragment()
+                        rootView.findNavController().navigate(action)
+                    }
+                    .show()
+
+            }
         }
 
 
@@ -39,47 +54,13 @@ class MainFragment : Fragment() {
                 when (view.id) {
                     R.id.true1 -> {
                         checkAnswer(true)
-                        if (viewModel.gameWon.value) {
-                            val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(wrong)
-                            rootView.findNavController().navigate(action)
-                        }
                     }
                     R.id.false1 -> {
                         checkAnswer(false)
-                        if (correct == 3) {
-                            val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(wrong)
-                            rootView.findNavController().navigate(action)
-                        }
                     }
-                    R.id.imageButton3 -> {
-                        if (index > 1) {
-                            index--
-                        }
-                        else {
-                            index = questions.size-1
-                        }
-                        binding.question1.text = getString(questions[index].question)
-                    }
-
                     R.id.nextQuest1 -> {
-                        if (index < questions.size-1) {
-                            index++
-                        }
-                        else {
-                            index = 0
-                        }
-                        binding.question1.text = getString(questions[index].question)
+                        viewModel.nextQuestion()
                     }
-                    R.id.question1 -> {
-                        if (index < questions.size-1) {
-                            index++
-                        }
-                        else {
-                            index = 0
-                        }
-                        binding.question1.text = getString(questions[index].question)
-                    }
-
                 }
             }
 
@@ -106,22 +87,20 @@ class MainFragment : Fragment() {
                 || super.onOptionsItemSelected(item)
     }
 
-    fun checkAnswer( answer: Boolean) {
-        if (viewModel.checkAnswer(answer) && viewModel.currentQuestionCheatStatus) {
+    fun checkAnswer(answer: Boolean) {
+        if (viewModel.currentQuestionCheatStatus && viewModel.checkAnswer(answer) ) {
             Toast.makeText(activity, getString(R.string.cheater), Toast.LENGTH_SHORT).show()
 
         }
         else if (viewModel.checkAnswer(answer)) {
             Toast.makeText(activity, getString(R.string.correct), Toast.LENGTH_SHORT).show()
-            myMediaPlayer = MediaPlayer.create(context, R.raw.ding)
-            myMediaPlayer.start()
-        }
-
-        else {
+//            myMediaPlayer = MediaPlayer.create(context, R.raw.ding)
+//            myMediaPlayer.start()
+        } else {
             Toast.makeText(activity, getString(R.string.wrong), Toast.LENGTH_SHORT).show()
-            myMediaPlayer = MediaPlayer.create(context, R.raw.boat)
-            myMediaPlayer.start()
-            }
+//            myMediaPlayer = MediaPlayer.create(context, R.raw.boat)
+//            myMediaPlayer.start()
+        }
     }
 
 

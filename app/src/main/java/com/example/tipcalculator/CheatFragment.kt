@@ -15,7 +15,6 @@ import kotlin.math.roundToLong
 class CheatFragment : Fragment() {
     private var _binding: FragmentCheatBinding? = null
     private val binding get() = _binding!!
-    private var cheat = false
     private val viewModel: QuizViewModel by activityViewModels()
 
 
@@ -26,12 +25,12 @@ class CheatFragment : Fragment() {
     ): View? {
         _binding = FragmentCheatBinding.inflate(inflater, container, false)
         val rootView = binding.root
-        val args = CheatFragmentArgs.fromBundle(requireArguments())binding.give.setOnClickListener{
-            binding.answer.text = args.cheat.toString()
-            cheat = true
-            setFragmentResult("REQUESTING_REPLY_KEY", bundleOf("REPLY_KEY" to cheat))
-            rootView.findNavController()
+
+        binding.give.setOnClickListener() {
+            viewModel.setCheatedStatusForCurrentQuestion(true)
+            binding.answer.text = viewModel.currentQuestionAnswer.toString()
         }
+
         setHasOptionsMenu(true)
 
         return rootView

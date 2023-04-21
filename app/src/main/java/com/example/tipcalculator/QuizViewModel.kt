@@ -1,11 +1,9 @@
 package com.example.tipcalculator
 
-import android.media.MediaPlayer
-import android.widget.Toast
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlin.math.absoluteValue
 
 class QuizViewModel : ViewModel() {
 
@@ -33,38 +31,60 @@ class QuizViewModel : ViewModel() {
     val gameWon: LiveData<Boolean>
         get() = _gameWon
 
-     var currentQuestionAnswer = questions[_index.value?:0].answer
-        get() = currentQuestionAnswer
+    val currentQuestionAnswer: Boolean
+        get() = questions[_index.value ?: 0].answer
 
-     var currentQuestionText = questions[_index.value?:0].question
-        get() = currentQuestionText
+    val currentQuestionText: Int
+        get() = questions[_index.value ?: 0].question
 
-    var currentQuestionCheatStatus = questions[_index.value?:0].cheated
-        get() = currentQuestionCheatStatus
+    val currentQuestionCheatStatus: Boolean
+        get() = questions[_index.value ?: 0].cheated
 
-    fun setCheatedStatusForCurrentQuestion(status: Boolean){
-        currentQuestionCheatStatus = status
+    fun setCheatedStatusForCurrentQuestion(status: Boolean) {
+        questions[_index.value ?: 0].cheated = status
     }
+
     fun checkIfGameWon() {
         if (_correct == 3) {
             _gameWon.value = true
         }
     }
-
-    fun nextQuestion() {
-        val currentIndex = index.value ?:0
-        _index.value = currentIndex + 1
+    fun reset() {
+        _correct = 0
+        _wrong = 0
+        _index.value = 0
+        questions[0].cheated = false
+        questions[1].cheated = false
+        questions[2].cheated = false
+        questions[3].cheated = false
+        questions[4].cheated = false
     }
 
-    fun checkAnswer( answer: Boolean):Boolean {
-        if (questions[_index.value?:0].answer == answer ) {
+    fun nextQuestion() {
+        val currentIndex = index.value ?: 0
+        if (currentIndex < questions.size - 1) {
+            _index.value = currentIndex + 1
+        } else
+            _index.value = 0
+
+    }
+
+
+
+    fun checkAnswer(answer: Boolean): Boolean {
+        if (currentQuestionAnswer == answer && currentQuestionCheatStatus) {
+            Log.i("MainActivity", "${_correct}")
+            return true
+        }
+        else if (currentQuestionAnswer == answer) {
+            _correct += 1
+            checkIfGameWon()
             return true
         }
         else {
-            _wrong++
+            _wrong += 1
             return false
         }
+        }
+
     }
-
-
-}

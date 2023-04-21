@@ -21,6 +21,11 @@
     <string name="incorrect">TextView</string>
     <string name="info">This is a quiz app about national capitals!</string>
     <string name="info2">We hope you enjoy!</string>
+    <string name="top">Congratulations!</string>
+
+    <string name="bottom">You Won! Would you like to play again?</string>
+
+
 
 
 </resources>
